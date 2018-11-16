@@ -1,0 +1,78 @@
+    	//State implementation for Vertical (I)
+    	if ((*state == 0) && (y < negy_thresh))
+    	{
+    		*state = 1;
+    		*msTickStateChange = msTick;
+    	}
+    	else if ((*state == 1) && ((abs_accz > posz_thresh)))
+    	{
+    		*state = 0;
+    		*msTickStateChange = msTick;
+    	}
+    	else if ((*state == 1) && (y < posy_stopthresh) && ((msTick - *msTickStateChange) < tau))
+    	{
+    		*state = 2;
+    		*msTickStateChange = msTick;
+    	}
+    	else if ((*state == 2) && ((msTick - *msTickStateChange) > tau)){
+    		*state = 0;
+    		*msTickStateChange = msTick;
+    		sprintf( dataOut, "\n\n\r\t\tI Detected!\n");
+    		CDC_Fill_Buffer((uint8_t *)dataOut, strlen(dataOut));
+    		//BSP_LED_On(LED1);
+    	}
+
+    	//Takes I State and Detects if I Becomes L
+    	else if ((*state == 2) && ((msTick - *msTickStateChange) < tau) && (x < negx_thresh)){
+    		*state = 7;
+    		*msTickStateChange = msTick;
+    	}
+    	else if ((*state == 7) && ((msTick - *msTickStateChange) < tau) && (x > posx_thresh)){
+    		*state = 8;
+    		*msTickStateChange = msTick;
+    	}
+    	else if ((*state == 8) && ((msTick - *msTickStateChange) > tau)){
+    		*state = 0;
+    		*msTickStateChange = msTick;
+    		sprintf( dataOut, "\n\n\r\t\tL Detected!\n");
+    		CDC_Fill_Buffer((uint8_t *)dataOut, strlen(dataOut));
+    		//BSP_LED_On(LED1);
+    	}
+
+
+    	//Takes I State and Detects if I becomes J
+    	else if ((*state == 2) && (x > posx_thresh) && ((msTick - *msTickStateChange) < tau)){
+    		*state = 3;
+    		*msTickStateChange = msTick;
+    	}
+    	else if ((*state == 3) && (x < negx_stopthresh) && ((msTick - *msTickStateChange) < tau)){
+    		*state = 4;
+    		*msTickStateChange = msTick;
+    	}
+    	else if ((*state == 4) && ((msTick - *msTickStateChange) > tau)){
+    		*state = 0;
+    		*msTickStateChange = msTick;
+    		sprintf( dataOut, "\n\n\r\t\tJ Detected!\n");
+    		CDC_Fill_Buffer((uint8_t *)dataOut, strlen(dataOut));
+    		//BSP_LED_On(LED1);
+    	}
+    	//Takes L State and Detects if L Becomes U
+    	else if ((*state == 4) && ((msTick - *msTickStateChange) < tau) && (y > posy_thresh)){
+    		*state = 5;
+    		*msTickStateChange = msTick;
+    	}
+    	else if ((*state == 5) && ((msTick - *msTickStateChange) < tau) && (y < posy_stopthresh)){
+    		*state = 6;
+    		*msTickStateChange = msTick;
+    	}
+    	else if ((*state == 6) && ((msTick - *msTickStateChange > tau))){
+    		*state = 0;
+    		*msTickStateChange = msTick;
+    		sprintf( dataOut, "\n\n\r\t\tU Detected!\n");
+    		CDC_Fill_Buffer((uint8_t *)dataOut, strlen(dataOut));
+    		//BSP_LED_On(LED1);
+    	}
+    	else if ((msTick - *msTickStateChange) > tau) {
+    		*state = 0;
+    		*msTickStateChange = msTick;
+    	}
