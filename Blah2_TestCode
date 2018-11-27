@@ -1,0 +1,152 @@
+// You will have test the following code on your own SensorTile (mine is plagued with the OpenOCD error)
+// A major problem with this code is that it does not test where the second and beyond strokes start from
+// Case 1: The Letter Y
+// I highly encourage you adjust the "10" in the if statement below (used to approximate).
+if ((*state == 0) && ((x / 10 == -y / 10) || ((x / 10) + 10 == (-y / 10) + 10)) {
+    if (y < negy_thresh && x > posx_thresh) {
+         *state = 1;
+         *msTickStateChange = msTick;
+    }
+}
+if ((*state == 1) && ((-x / 10 == -y / 10) || ((-x / 10) + 10 == (-y / 10) + 10)) {
+    if (y < negy_thresh && x < negx_thresh) {
+         *state = 2;
+         *msTickStateChange = msTick;
+    }
+}
+if (*state == 2) {
+    if (y < negy_thresh) {
+         *state = 0;
+         *msTickStateChange = msTick;
+         sprintf( dataOut, "\n\n\r\t\tY Detected!\n");
+	 CDC_Fill_Buffer((uint8_t *)dataOut, strlen(dataOut));
+    }
+}
+
+// Case 2: Letter X
+if ((*state == 0) && ((x / 10 == -y / 10) || ((x / 10) + 10 == (-y / 10) + 10)) {
+    if (y < 2 * negy_thresh && x > 2 * posx_thresh) {
+         *state = 1;
+         *msTickStateChange = msTick;
+    }
+}
+if ((*state == 1) && ((-x / 10 == -y / 10) || ((-x / 10) + 10 == (-y / 10) + 10)) {
+    if (y < 2 * negy_thresh && x < 2 * negx_thresh) {
+         *state = 0;
+         *msTickStateChange = msTick;
+         sprintf( dataOut, "\n\n\r\t\tX Detected!\n");
+	 CDC_Fill_Buffer((uint8_t *)dataOut, strlen(dataOut));
+    }
+}
+
+// Case 3: Letter V
+if ((*state == 0) && ((x / 10 == -y / 10) || ((x / 10) + 10 == (-y / 10) + 10)) {
+    if (y < 2 * negy_thresh && x > 2 * posx_thresh) {
+         *state = 1;
+         *msTickStateChange = msTick;
+    }
+}
+if ((*state == 1) && ((x / 10 == y / 10) || ((x / 10) + 10 == (y / 10) + 10)) {
+    if (y > 2 * posy_thresh && x > 2 * posx_thresh) {
+         *state = 0;
+         *msTickStateChange = msTick;
+         sprintf( dataOut, "\n\n\r\t\tV Detected!\n");
+	 CDC_Fill_Buffer((uint8_t *)dataOut, strlen(dataOut));
+    }
+}
+
+//Case 4: Letter W
+if ((*state == 0) && ((x / 10 == -y / 10) || ((x / 10) + 10 == (-y / 10) + 10)) {
+    if (y < 2 * negy_thresh && x > 2 * posx_thresh) {
+         *state = 1;
+         *msTickStateChange = msTick;
+    }
+}
+if ((*state == 1) && ((x / 10 == y / 10) || ((x / 10) + 10 == (y / 10) + 10)) {
+    if (y > 2 * posy_thresh && x > 2 * posx_thresh) {
+         *state = 2;
+         *msTickStateChange = msTick;
+    }
+}
+if ((*state == 2) && ((x / 10 == -y / 10) || ((x / 10) + 10 == (-y / 10) + 10)) {
+    if (y < 2 * negy_thresh && x > 2 * posx_thresh) {
+         *state = 3;
+         *msTickStateChange = msTick;
+    }
+}
+if ((*state == 3) && ((x / 10 == y / 10) || ((x / 10) + 10 == (y / 10) + 10)) {
+    if (y > 2 * posy_thresh && x > 2 * posx_thresh) {
+         *state = 0;
+         *msTickStateChange = msTick;
+         sprintf( dataOut, "\n\n\r\t\tW Detected!\n");
+	 CDC_Fill_Buffer((uint8_t *)dataOut, strlen(dataOut));
+    }
+}
+
+//Case 5: Letter Z
+if (*state == 0) {
+     if (x > posx_thresh) {
+          *state = 1;
+          *msTickStateChange = msTick;
+     }
+}
+if ((*state == 1) && ((x / 10 == y / 10) || ((x / 10) + 10 == (y / 10) + 10)) {
+    if (-y > 2 * posy_thresh && -x > 2 * posx_thresh) {
+         *state = 2;
+         *msTickStateChange = msTick;
+    }
+}
+if (*state == 2) {
+     if (x > posx_thresh) {
+          *state = 0;
+          *msTickStateChange = msTick;
+          sprintf( dataOut, "\n\n\r\t\tZ Detected!\n");
+	  CDC_Fill_Buffer((uint8_t *)dataOut, strlen(dataOut));
+     }
+}
+
+//Case 6: Letter T
+if (*state == 0) {
+     if (x > posx_thresh) {
+          *state = 1;
+          *msTickStateChange = msTick;
+     }
+}
+if (*state == 1) {
+     if (y < negy_thresh) {
+          *state = 0;
+          *msTickStateChange = msTick;
+          sprintf( dataOut, "\n\n\r\t\tT Detected!\n");
+	  CDC_Fill_Buffer((uint8_t *)dataOut, strlen(dataOut));
+     }
+}
+
+//Case 7: Letter F
+if (*state == 0) {
+     if (x < negx_thresh) {
+          *state = 1;
+          *msTickStateChange = msTick;
+     }
+}
+if (*state == 1) {
+     if (y < negy_thresh) {
+          *state = 2;
+          *msTickStateChange = msTick;
+     }
+}
+if (*state == 2) {
+     if (x > posx_thresh) {
+          *state = 0;
+          *msTickStateChange = msTick;
+	  sprintf( dataOut, "\n\n\r\t\tF Detected!\n");
+	  CDC_Fill_Buffer((uint8_t *)dataOut, strlen(dataOut));
+     }
+}
+
+//Case 8: Letter H
+
+//Case 9: Letter K
+
+//Case 10: Letter M
+
+//Case 11: Letter N
